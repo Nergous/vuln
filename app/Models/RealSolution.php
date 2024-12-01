@@ -8,6 +8,7 @@ class RealSolution extends Model
 {
     protected $fillable = [
         'solution',
+        'path_to_file'
     ];
 
     public function vulnerabilities()

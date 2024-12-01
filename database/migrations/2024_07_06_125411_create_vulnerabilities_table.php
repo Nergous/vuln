@@ -12,8 +12,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('code')->nullable();
             $table->string('software')->nullable();
-            $table->enum('status', ['High', 'Middle', 'Low']);
             $table->enum('complete_status', ['Completed', 'In work']);
+            $table->integer('not_used')->default(0);
             $table->timestamps();
         });
     }

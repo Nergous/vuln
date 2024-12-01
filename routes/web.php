@@ -38,7 +38,7 @@ Route::put('/report/change_vulnerability/{id}/update', [VulnerabilitiesControlle
 Route::get('/delay/{id}', [ReportController::class, 'delay'])->name('report.delay')->middleware('auth', 'role:Admin');
 Route::post('/delay/{id}/update', [ReportController::class, 'createDelay'])->name('report.create_delay')->middleware('auth', 'role:Admin');
 
-Route::get('/export/yearly', [ReportController::class, 'exportYearlyReport'])->name('export.yearly');
+Route::get('/export/yearly', [ReportController::class, 'exportYearly'])->name('export.yearly');
 
 Route::get('/download/{filename}', function ($filename) {
     $path = storage_path('app/documents/' . $filename);
@@ -48,3 +48,13 @@ Route::get('/download/{filename}', function ($filename) {
         abort(404);
     }
 })->where('filename', '.*')->name('download.file');
+
+
+Route::post('/upload-image', [VulnerabilitiesController::class, 'uploadImage'])->name('upload.image');
+
+Route::post('/save-compensating-solution', [VulnerabilitiesController::class, 'saveCompensatingSolution'])->name('save.compensating.solution');
+Route::post('/add-new-status', [VulnerabilitiesController::class, 'addNewStatus'])->name('add.new.status');
+Route::get('/download-file/{id}', [VulnerabilitiesController::class, 'downloadFile'])->name('download.file');
+
+Route::get('/report_download', [ReportController::class, 'showDownloadPage'])->name('report.download');
+Route::post('/save-tag', [ReportController::class, 'saveTag'])->name('save.tag');

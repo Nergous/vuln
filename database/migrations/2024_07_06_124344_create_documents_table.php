@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('stamp_low_date')->nullable();
             $table->string('stamp_low_number')->nullable();
             $table->enum('status', ['Completed', 'Delayed', 'In work']);
-            $table->string('path_to_file');
+            $table->string('path_to_file')->nullable();;
             
             $table->timestamps();
         });

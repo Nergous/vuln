@@ -56,6 +56,7 @@
                                 <select name="type" id="type" class="form-control">
                                     <option value="Admin">Администратор</option>
                                     <option value="Operator">Оператор</option>
+                                    <option value="Viewer">Смотрящий😎</option>
                                 </select>
 
                             </div>

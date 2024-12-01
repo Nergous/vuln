@@ -59,7 +59,7 @@ class AuthController extends Controller
         $request->validate([
             'login' => 'required|unique:users',
             'password' => 'required|min:6',
-            'type' => 'required|in:Admin,Operator',
+            'type' => 'required|in:Admin,Operator,Viewer',
         ]);
 
         $user = User::create([
@@ -90,7 +90,7 @@ class AuthController extends Controller
         $request->validate([
             'login' => 'nullable|unique:users,login,' . $user->id,
             'password' => 'nullable|min:6',
-            'type' => 'required|in:Admin,Operator',
+            'type' => 'required|in:Admin,Operator,Viewer',
 
         ]);
         if ($user->login != $request->login && $request->login != null) {

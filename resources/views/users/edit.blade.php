@@ -52,6 +52,8 @@
                                     </option>
                                     <option value="Operator" @if($user->type == 'Operator') selected @endif>Оператор
                                     </option>
+                                    <option value="Viewer" @if($user->type == 'Viewer') selected @endif>Смотрящий😎
+                                    </option>
                                 </select>
                             </div>
                         </div>

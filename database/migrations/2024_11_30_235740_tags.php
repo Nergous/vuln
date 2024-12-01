@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::create('delayed_documents', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->date('delayed_date');
-            $table->text('reason');
-            $table->foreignId('document_id')->constrained('documents')->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('delayed_documents');
+        Schema::dropIfExists('tags');
     }
 };

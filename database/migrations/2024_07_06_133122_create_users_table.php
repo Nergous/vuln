@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('login')->unique();
             $table->string('password');
-            $table->enum('type', ['Operator', 'Admin']);
+            $table->enum('type', ['Operator', 'Admin', 'Viewer']);
             $table->timestamps();
         });
     }

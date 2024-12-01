@@ -32,4 +32,9 @@ class Document extends Model
     {
         return $this->hasOne(DelayedDocument::class, 'document_id');
     }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tags::class);
+    }
 }

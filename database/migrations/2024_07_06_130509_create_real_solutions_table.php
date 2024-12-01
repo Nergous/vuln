@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->text('solution');
             $table->timestamps();
+            $table->string('path_to_file')->nullable();
         });
     }
 

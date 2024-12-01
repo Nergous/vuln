@@ -18,7 +18,7 @@ class HomeController extends Controller
         $filterMonth = $request->input('filter_month');
         $filterStatus = $request->input('filter_status');
 
-        $query = Document::with('delayedDocument')->orderBy($sort, $order);
+        $query = Document::with('delayedDocument', 'tags')->orderBy($sort, $order);
 
         if ($filterYear) {
             if ($filterMonth && $filterMonth != 'all') {
@@ -36,11 +36,15 @@ class HomeController extends Controller
         $documents->each(function ($document) {
             if ($document->delayedDocument) {
                 $document->delayedReason = $document->delayedDocument->reason;
-                // log this in console
-
             }
-        }); 
+        });
 
-        return view('home', compact('user', 'documents'));
+        // Получаем уникальные года из базы данных
+        $uniqueYears = Document::selectRaw('YEAR(date) as year')
+            ->distinct()
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
+        return view('home', compact('user', 'documents', 'uniqueYears'));
     }
 }
