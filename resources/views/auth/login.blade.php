@@ -1,60 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Вход</div>
+<!-- Подключаем Tailwind CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+<div class="min-h-screen bg-gray-100 p-6">
+    <!-- Основной контент -->
+    <div class="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800 text-center">Вход</h1>
 
-                        <div class="form-group row">
-                            <label for="login" class="col-md-4 col-form-label text-md-right">Логин</label>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-                            <div class="col-md-6">
-                                <input id="login" type="text" class="form-control @error('login') is-invalid @enderror"
-                                    name="login" value="{{ old('login') }}" required autofocus>
-
-                                @error('login')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Пароль</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password"
-                                    class="form-control @error('password') is-invalid @enderror" name="password"
-                                    required>
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <!-- button submit -->
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Войти
-                                </button>
-                            </div>
-                        </div>
-                       
-                    </form>
-                </div>
+            <!-- Логин -->
+            <div class="mb-6">
+                <label for="login" class="block text-gray-600 mb-2">Логин:</label>
+                <input id="login" type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('login') border-red-500 @enderror"
+                    name="login" value="{{ old('login') }}" required autofocus>
+                @error('login')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
             </div>
-        </div>
+
+            <!-- Пароль -->
+            <div class="mb-6">
+                <label for="password" class="block text-gray-600 mb-2">Пароль:</label>
+                <input id="password" type="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror"
+                    name="password" required>
+                @error('password')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Кнопка входа -->
+            <div class="flex justify-center">
+                <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
+                    Войти
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection

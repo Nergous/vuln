@@ -1,82 +1,62 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Создание пользователя</div>
+<!-- Подключаем Tailwind CSS -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('users.store') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="login" class="col-md-4 col-form-label text-md-right">Логин</label>
-
-                            <div class="col-md-6">
-
-                                <input id="login" type="text" class="form-control @error('login') is-invalid @enderror"
-                                    name="login" value="{{ old('login') }}" required autocomplete="login" autofocus>
-
-                                @error('login')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Пароль</label>
-
-                            <div class="col-md-6">
-
-                                <input id="password" type="password"
-                                    class="form-control @error('password') is-invalid @enderror" value="{{ old('password') }}" name="password"
-                                    required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-
-                            </div>
-                        </div>
-
-                        
-
-                        <div class="form-group row">
-                            <label for="type" class="col-md-4 col-form-label text-md-right">Тип</label>
-
-                            <div class="col-md-6">
-
-                                <select name="type" id="type" class="form-control">
-                                    <option value="Admin">Администратор</option>
-                                    <option value="Operator">Оператор</option>
-                                    <option value="Viewer">Смотрящий😎</option>
-                                </select>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-
-                                <button type="submit" class="btn btn-primary">
-                                    Сохранить
-                                </button>
-
-                                <a href="{{ route('users.index') }}" class="btn btn-secondary">Назад</a>
-
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
+<div class="min-h-screen bg-gray-100 p-6">
+    <!-- Шапка -->
+    <div class="sticky top-0 z-10 bg-white shadow-lg rounded-lg mb-6">
+        <div class="flex justify-between items-center p-4">
+            <div class="flex space-x-4">
+                <a href="{{ route('users.index') }}" class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg hover:bg-gray-400 transition duration-300">Назад</a>
             </div>
         </div>
     </div>
+
+    <!-- Основной контент -->
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800">Создание пользователя</h1>
+
+        <form method="POST" action="{{ route('users.store') }}">
+            @csrf
+
+            <!-- Логин -->
+            <div class="mb-6">
+                <label for="login" class="block text-gray-600 mb-2">Логин:</label>
+                <input id="login" type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('login') border-red-500 @enderror"
+                    name="login" value="{{ old('login') }}" required autocomplete="login" autofocus>
+                @error('login')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Пароль -->
+            <div class="mb-6">
+                <label for="password" class="block text-gray-600 mb-2">Пароль:</label>
+                <input id="password" type="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('password') border-red-500 @enderror"
+                    name="password" required autocomplete="new-password">
+                @error('password')
+                <span class="text-red-500 text-sm">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Тип пользователя -->
+            <div class="mb-6">
+                <label for="type" class="block text-gray-600 mb-2">Тип:</label>
+                <select name="type" id="type" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="Admin">Администратор</option>
+                    <option value="Operator">Оператор</option>
+                    <option value="Viewer">Смотрящий😎</option>
+                </select>
+            </div>
+
+            <!-- Кнопки -->
+            <div class="flex space-x-4">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Сохранить</button>
+                <a href="{{ route('users.index') }}" class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg hover:bg-gray-400 transition duration-300">Назад</a>
+            </div>
+        </form>
+    </div>
 </div>
+@endsection

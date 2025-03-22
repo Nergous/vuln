@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
 class CheckRole
 {
     /**
@@ -13,11 +14,14 @@ class CheckRole
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, ...$role): Response
     {
-        if ($request->user()->type !== $role) {
-            return redirect('/')->with('error', 'Недостаточно прав');
+        foreach ($role as $r) {
+            if ($request->user()->type == $r) {
+                
+                return $next($request);
+            }
         }
-        return $next($request);
+        return redirect('/')->with('error', 'Недостаточно прав');
     }
 }

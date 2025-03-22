@@ -6,7 +6,9 @@ use App\Models\DelayedDocument;
 use Illuminate\Http\Request;
 use App\Models\Document;
 use App\Models\Status;
+use App\Exports\MainReport;
 use App\Exports\YearlyReportExport;
+use App\Exports\MonthlyReportExport;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Tags;
@@ -153,6 +155,7 @@ class ReportController extends Controller
             'path_to_file' => $document->path_to_file, // Обновляем путь к файлу, если он был изменен
         ]);
 
+        // Обработка тегов
         $tags = [];
         if ($request->has('tags')) {
             foreach ($request->tags as $tagNum => $tagName) {
@@ -168,28 +171,59 @@ class ReportController extends Controller
 
         // Обработка уязвимостей
         if ($request->has('vulnerabilities')) {
-            $vulnerabilities = collect($request->vulnerabilities);
-            $document->vulnerabilities()->each(function ($vulnerability) use ($vulnerabilities) {
-                if (!$vulnerabilities->contains('name', $vulnerability->name)) {
-                    $vulnerability->delete();
-                }
-            });
+            $existingVulnerabilities = $document->vulnerabilities->keyBy('name');
 
-            foreach ($request->vulnerabilities as $vulnerability) {
-                $status = Status::where('id', $vulnerability['status'])->first(); // Ищем статус по имени
-                $document->vulnerabilities()->updateOrCreate(
-                    ['name' => $vulnerability['name']],
-                    [
-                        'code' => $vulnerability['code'],
-                        'software' => $vulnerability['software'],
-                        'status_id' => $status->id, // Используем ID статуса
+            foreach ($request->vulnerabilities as $vulnerabilityData) {
+                $status = Status::where('id', $vulnerabilityData['status'])->first();
+
+                if ($existingVulnerabilities->has($vulnerabilityData['name'])) {
+                    // Обновляем существующую уязвимость
+                    $existingVulnerability = $existingVulnerabilities->get($vulnerabilityData['name']);
+                    $existingVulnerability->update([
+                        'code' => $vulnerabilityData['code'],
+                        'software' => $vulnerabilityData['software'],
+                        'status_id' => $status->id,
+                    ]);
+                } else {
+                    // Создаем новую уязвимость
+                    $document->vulnerabilities()->create([
+                        'name' => $vulnerabilityData['name'],
+                        'code' => $vulnerabilityData['code'],
+                        'software' => $vulnerabilityData['software'],
+                        'status_id' => $status->id,
                         'complete_status' => 'In work',
-                    ]
-                );
+                    ]);
+
+                    // Если статус документа "Выполнено", меняем его на "В работе"
+                    if ($document->status === 'Completed') {
+                        $document->update(['status' => 'In work']);
+                    }
+                }
             }
+
+            // Удаляем уязвимости, которые не были переданы в запросе
+            $document->vulnerabilities()
+                ->whereNotIn('name', collect($request->vulnerabilities)->pluck('name'))
+                ->delete();
         } else {
+            // Если уязвимостей нет в запросе, удаляем все существующие
             $document->vulnerabilities()->delete();
         }
+
+        // Проверка статуса документа после удаления уязвимостей
+        $hasIncompleteVulnerabilities = $document->vulnerabilities()
+            ->where('complete_status', '!=', 'Completed')
+            ->exists();
+
+        if ($hasIncompleteVulnerabilities) {
+            // Если есть уязвимости со статусом, отличным от "Выполнено", статус документа "В работе"
+            $document->update(['status' => 'In work']);
+        } else {
+            // Если все уязвимости выполнены, статус документа "Выполнено"
+            $document->update(['status' => 'Completed']);
+        }
+
+        // Синхронизация тегов
         if (!empty($tags)) {
             $document->tags()->sync($tags);
         }
@@ -204,7 +238,7 @@ class ReportController extends Controller
         return view('report.all_vulnerabilites', compact('document', 'statuses'));
     }
 
-    public function exportYearly(Request $request)
+    public function exportMain(Request $request)
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
@@ -212,7 +246,7 @@ class ReportController extends Controller
         $onlyIncomplete = $request->input('only_incomplete', false);
         $filterStatus = $request->input('filter_status', '');
 
-        return Excel::download(new YearlyReportExport($startDate, $endDate, $fields, $onlyIncomplete, $filterStatus), 'yearly_report.xlsx');
+        return Excel::download(new MainReport($startDate, $endDate, $fields, $onlyIncomplete, $filterStatus), `{$startDate}-{$endDate}report.xlsx`);
     }
 
     public function delay($id)
@@ -256,7 +290,43 @@ class ReportController extends Controller
         $tag = Tags::create([
             'name' => $request->name,
         ]);
-        dd("Говно");
         return response()->json(['id' => $tag->id, 'name' => $tag->name]);
+    }
+
+    public function downloadReport($filename)
+    {
+        // Проверяем, существует ли файл
+        $filePath = storage_path('app/documents/' . $filename);
+
+        if (!file_exists($filePath)) {
+            return abort(404, 'Файл не найден.');
+        }
+
+        // Отправляем файл для скачивания
+        return response()->download($filePath, basename($filePath));
+    }
+
+    public function showCountPage()
+    {
+        return view('report.count');
+    }
+
+    public function exportYearly(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        $filename = $startDate.'-'.$endDate.'_yearly_report.xlsx';
+
+        return Excel::download(new YearlyReportExport($startDate, $endDate), $filename);
+    }
+
+    public function exportMonthly(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $filename = $startDate.'-'.$endDate.'_monthly_report.xlsx';
+
+        return Excel::download(new MonthlyReportExport($startDate, $endDate), $filename);
     }
 }

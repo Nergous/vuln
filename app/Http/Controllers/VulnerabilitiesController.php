@@ -182,4 +182,12 @@ class VulnerabilitiesController extends Controller
         // Отправляем файл для скачивания
         return response()->download($filePath, basename($filePath));
     }
+
+    public function getAllVulnerabilityCodes()
+    {
+        // Получаем все уникальные коды уязвимостей
+        $codes = Vulnerability::pluck('code')->unique()->values();
+
+        return response()->json($codes);
+    }
 }
