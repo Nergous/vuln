@@ -27,6 +27,9 @@ class HomeController extends Controller
                 $query->whereYear('date', $filterYear);
             }
         }
+        if ($filterMonth && $filterMonth != 'all') {
+            $query->whereMonth('date', $filterMonth);
+        }
 
         if ($filterStatus) {
             $query->where('status', $filterStatus);
