@@ -43,6 +43,7 @@ Route::get('/export/main', [ReportController::class, 'exportMain'])->name('expor
 Route::get('/report-count', [ReportController::class, 'showCountPage'])->name('report.count');
 Route::get('/export/yearly', [ReportController::class, 'exportYearly'])->name('export.yearly');
 Route::get('/export/monthly', [ReportController::class, 'exportMonthly'])->name('export.monthly');
+Route::get('/export/tags', [ReportController::class, 'exportByTags'])->name('export.tags');
 
 
 Route::get('/download/{filename}', function ($filename) {

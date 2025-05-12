@@ -15,6 +15,11 @@
                 @if($user->type != 'Viewer')
                 <a href="{{ route('report.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Добавить руководящий документ</a>
                 @endif
+                <a href="#"
+                    class="tag-export-btn px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition duration-300 hidden"
+                    id="tag-export-btn">
+                    Выгрузить по тэгам
+                </a>
                 <a href="{{ route('report.download') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">Выгрузить отчет</a>
                 <a href="{{ route('report.count') }}" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300">Количество отчетов</a>
             </div>
@@ -82,10 +87,20 @@
                         <option value="Delayed" {{ request('filter_status') == 'Delayed' ? 'selected' : '' }}>Отложен</option>
                     </select>
                 </div>
+                <div>
+                    <label class="block text-gray-600 mb-2">На странице:</label>
+                    <select name="per_page" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="5" {{ request('per_page', 5) == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ request('per_page', 5) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="20" {{ request('per_page', 5) == 20 ? 'selected' : '' }}>20</option>
+                        <option value="50" {{ request('per_page', 5) == 50 ? 'selected' : '' }}>50</option>
+                    </select>
+                </div>
                 <div class="flex items-end space-x-4">
                     <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Применить</button>
                     <a href="{{ route('home') }}" class="px-4 py-2 bg-gray-300 text-gray-600 rounded-lg hover:bg-gray-400 transition duration-300">Сбросить</a>
                 </div>
+
             </form>
         </div>
 
@@ -212,6 +227,9 @@
                 </tbody>
             </table>
         </div>
+        <div class="mt-6">
+            {{ $documents->appends(request()->query())->links() }}
+        </div>
     </div>
 </div>
 
@@ -255,6 +273,7 @@
 
                 // Фильтруем строки таблицы
                 filterRowsByTags();
+                updateExportButton();
             });
         });
 
@@ -265,6 +284,20 @@
                 row.style.display = shouldDisplay ? '' : 'none';
             });
         }
+
+        function updateExportButton() {
+        const exportButton = document.getElementById('tag-export-btn');
+        const baseExportUrl = "{{ route('export.tags') }}"; // Замените на вашу роут
+        const tags = selectedTags.join(',');
+
+        if (selectedTags.length > 0) {
+            exportButton.href = `${baseExportUrl}?tags=${tags}`;
+            exportButton.classList.remove('hidden');
+        } else {
+            exportButton.href = '#';
+            exportButton.classList.add('hidden');
+        }
+    }
     });
 
     // Функция для открытия/закрытия выпадающего списка
@@ -348,6 +381,42 @@
 
     .table td {
         vertical-align: top;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination li {
+        margin: 0 4px;
+    }
+
+    .pagination a,
+    .pagination span {
+        display: inline-block;
+        padding: 8px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        color: #4b5563;
+        text-decoration: none;
+    }
+
+    .pagination a:hover {
+        background-color: #f3f4f6;
+    }
+
+    .pagination .active span {
+        background-color: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+
+    .pagination .disabled span {
+        color: #9ca3af;
+        cursor: not-allowed;
     }
 </style>
 @endsection

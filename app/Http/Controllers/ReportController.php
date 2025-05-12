@@ -9,6 +9,7 @@ use App\Models\Status;
 use App\Exports\MainReport;
 use App\Exports\YearlyReportExport;
 use App\Exports\MonthlyReportExport;
+use App\Exports\TagReportExport;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Tags;
@@ -246,7 +247,7 @@ class ReportController extends Controller
         $onlyIncomplete = $request->input('only_incomplete', false);
         $filterStatus = $request->input('filter_status', '');
 
-        return Excel::download(new MainReport($startDate, $endDate, $fields, $onlyIncomplete, $filterStatus), `{$startDate}-{$endDate}report.xlsx`);
+        return Excel::download(new MainReport($startDate, $endDate, $fields, $onlyIncomplete, $filterStatus), "{$startDate}-{$endDate}_report.xlsx");
     }
 
     public function delay($id)
@@ -316,7 +317,7 @@ class ReportController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        $filename = $startDate.'-'.$endDate.'_yearly_report.xlsx';
+        $filename = $startDate . '-' . $endDate . '_yearly_report.xlsx';
 
         return Excel::download(new YearlyReportExport($startDate, $endDate), $filename);
     }
@@ -325,8 +326,14 @@ class ReportController extends Controller
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
-        $filename = $startDate.'-'.$endDate.'_monthly_report.xlsx';
+        $filename = $startDate . '-' . $endDate . '_monthly_report.xlsx';
 
         return Excel::download(new MonthlyReportExport($startDate, $endDate), $filename);
+    }
+
+    public function exportByTags(Request $request)
+    {
+        $tagIds = explode(',', $request->query('tags'));
+        return Excel::download(new TagReportExport($tagIds), 'отчет_по_тегам.xlsx');
     }
 }

@@ -17,6 +17,7 @@ class HomeController extends Controller
         $filterYear = $request->input('filter_year');
         $filterMonth = $request->input('filter_month');
         $filterStatus = $request->input('filter_status');
+        $perPage = $request->input('per_page', 5);
 
         $query = Document::with('delayedDocument', 'tags')->orderBy($sort, $order);
 
@@ -35,7 +36,16 @@ class HomeController extends Controller
             $query->where('status', $filterStatus);
         }
 
-        $documents = $query->get();
+        $documents = $query->paginate($perPage);
+        $documents->appends([
+            'sort' => $sort,
+            'order' => $order,
+            'filter_year' => $filterYear,
+            'filter_month' => $filterMonth,
+            'filter_status' => $filterStatus,
+            'per_page' => $perPage
+        ]);
+        
         $documents->each(function ($document) {
             if ($document->delayedDocument) {
                 $document->delayedReason = $document->delayedDocument->reason;
