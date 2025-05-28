@@ -152,7 +152,9 @@
                             </a>
                         </th>
                         <th class="w-64 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Тэги</th>
+                        @if($user->type == 'Admin')
                         <th class="w-32 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Уязвимости</th>
+                        @endif
                         <th class="w-24 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
                     </tr>
                 </thead>
@@ -189,9 +191,11 @@
                                 @endforeach
                             </div>
                         </td>
+                        @if($user->type == 'Admin')
                         <td class="w-32 px-6 py-4 whitespace-nowrap">
                             <a href="{{ route('report.all_vulnerabilites', $document->id) }}" class="px-3 py-1.5 text-sm text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg transition duration-300">⚠️ Уязвимости</a>
                         </td>
+                        @endif
                         <td class="w-24 px-6 py-4 whitespace-nowrap">
                             <div class="relative">
                                 <!-- Кнопка для открытия выпадающего списка -->
