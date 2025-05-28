@@ -31,7 +31,7 @@ Route::delete('/report/{id}', [ReportController::class, 'destroy'])->name('repor
 Route::put('/report/{id}', [ReportController::class, 'update'])->name('report.update')->middleware('auth', 'role:Admin');
 
 
-Route::get('/report/{id}', [ReportController::class, 'show'])->name('report.all_vulnerabilites')->middleware('auth', 'role:Operator,Admin');
+Route::get('/report/{id}', [ReportController::class, 'show'])->name('report.all_vulnerabilites')->middleware('auth', 'role:Admin');
 Route::get('/report/change_vulnerability/{id}', [VulnerabilitiesController::class, 'changeVulnerability'])->name('report.change_vulnerability')->middleware('auth', 'role:Admin');
 Route::put('/report/change_vulnerability/{id}/update', [VulnerabilitiesController::class, 'updateVulnerability'])->name('report.update_vulnerability')->middleware('auth', 'role:Admin');
 
