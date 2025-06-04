@@ -24,12 +24,13 @@ Route::put('/users/{id}',      [AuthController::class, 'update'])->name('users.u
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 Route::post('/report', [ReportController::class, 'store'])->name('report.store')->middleware('auth', 'role:Admin,Operator');
-Route::get('/report/create', [ReportController::class, 'create'])->name('report.create');
+Route::get('/report/create', [ReportController::class, 'create'])->name('report.create')->middleware('auth', 'role:Admin,Operator');
 
 Route::get('/report/{id}/edit', [ReportController::class, 'edit'])->name('report.edit')->middleware('auth', 'role:Admin');
 Route::delete('/report/{id}', [ReportController::class, 'destroy'])->name('report.destroy')->middleware('auth', 'role:Admin');
 Route::put('/report/{id}', [ReportController::class, 'update'])->name('report.update')->middleware('auth', 'role:Admin');
 
+Route::get('/report_download', [ReportController::class, 'showDownloadPage'])->name('report.download');
 
 Route::get('/report/{id}', [ReportController::class, 'show'])->name('report.all_vulnerabilites')->middleware('auth', 'role:Admin');
 Route::get('/report/change_vulnerability/{id}', [VulnerabilitiesController::class, 'changeVulnerability'])->name('report.change_vulnerability')->middleware('auth', 'role:Admin');
@@ -55,15 +56,14 @@ Route::get('/download/{filename}', function ($filename) {
     }
 })->where('filename', '.*')->name('download.file');
 
+Route::get('/download-file/{id}', [VulnerabilitiesController::class, 'downloadFile'])->name('download.file');
 
 Route::post('/upload-image',    [VulnerabilitiesController::class, 'uploadImage'])->name('upload.image');
+Route::post('/save-tag', [ReportController::class, 'saveTag'])->name('save.tag');
+Route::get('/download-report/{filename}', [ReportController::class, 'downloadReport'])->name('download.report');
+Route::get('/vulnerabilities/all-codes', [VulnerabilitiesController::class, 'getAllVulnerabilityCodes'])->name('vulnerabilities.all.codes');
+Route::post('/add-new-status', [VulnerabilitiesController::class, 'addNewStatus'])->name('add.new.status');
 
 Route::group(['middleware' => ['auth', 'role:Admin']], function () {
     Route::post('/save-compensating-solution', [VulnerabilitiesController::class, 'saveCompensatingSolution'])->name('save.compensating.solution');
-    Route::post('/add-new-status', [VulnerabilitiesController::class, 'addNewStatus'])->name('add.new.status');
-    Route::get('/download-file/{id}', [VulnerabilitiesController::class, 'downloadFile'])->name('download.file');
-    Route::get('/report_download', [ReportController::class, 'showDownloadPage'])->name('report.download');
-    Route::post('/save-tag', [ReportController::class, 'saveTag'])->name('save.tag');
-    Route::get('/download-report/{filename}', [ReportController::class, 'downloadReport'])->name('download.report');
-    Route::get('/vulnerabilities/all-codes', [VulnerabilitiesController::class, 'getAllVulnerabilityCodes'])->name('vulnerabilities.all.codes');
 });
