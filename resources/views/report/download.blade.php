@@ -48,7 +48,7 @@
                     <div class="additional-fields ml-6" style="display: none;">
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="fields[]" value="vulnerability_name" class="form-checkbox h-5 w-5 text-blue-600">
-                            <span class="ml-2 text-gray-700">Название уязвимости / задачи</span>
+                            <span class="ml-2 text-gray-700">Наименование уязвимости / задачи</span>
                         </label>
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="fields[]" value="real_solutions" class="form-checkbox h-5 w-5 text-blue-600">
@@ -72,7 +72,7 @@
 
             <!-- Статус документа -->
             <div class="mb-6">
-                <label for="filter_status" class="block text-gray-600 mb-2">Статус документа:</label>
+                <label for="filter_status" class="block text-gray-600 mb-2">Статус письма:</label>
                 <select name="filter_status" id="filter_status" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <option value="">Все</option>
                     <option value="Completed">Завершенный</option>

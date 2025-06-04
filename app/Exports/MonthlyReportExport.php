@@ -17,6 +17,7 @@ class MonthlyReportExport implements FromCollection, WithHeadings, WithMapping, 
     public function __construct($startDate, $endDate)
     {
         $this->startDate = $startDate;
+        
         $this->endDate = $endDate;
     }
 

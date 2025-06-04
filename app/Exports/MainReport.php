@@ -167,13 +167,13 @@ class MainReport implements FromCollection, WithHeadings, WithEvents
     {
         $defaultHeadings = [
             'serial_number' => 'п.н.',
-            'document_number' => 'Номер документа',
-            'document_name' => 'Название документа',
+            'document_number' => 'Номер письма',
+            'document_name' => 'Наименование письма',
             'document_date' => 'Дата',
-            'document_status' => 'Статус документа',
+            'document_status' => 'Статус письма',
             'delayed_reason' => 'Причина отложки',
             'vulnerability_code' => 'Код уязвимости / задачи',
-            'vulnerability_name' => 'Название уязвимости / задачи',
+            'vulnerability_name' => 'Наименование уязвимости / задачи',
             'real_solutions' => 'Реальные решения',  // Переименованный столбец
             'compensating_solutions' => 'Компенсирующие решения',  // Новый столбец
         ];
@@ -258,9 +258,8 @@ class MainReport implements FromCollection, WithHeadings, WithEvents
                 ];
                 $sheet->getStyle("A1:" . Coordinate::stringFromColumnIndex($lastColumn) . "1")->applyFromArray($headerStyle);
 
-                // Стилизация всего документа
                 $allBordersStyle = [
-                    'font' => ['name' => 'Consolas'], // Установлен шрифт Consolas для всего документа
+                    'font' => ['name' => 'Consolas'], 
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,

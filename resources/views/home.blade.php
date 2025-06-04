@@ -13,7 +13,7 @@
                 <a href="{{ route('users.index') }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300">Все пользователи</a>
                 @endif
                 @if($user->type != 'Viewer')
-                <a href="{{ route('report.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Добавить руководящий документ</a>
+                <a href="{{ route('report.create') }}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">Добавить руководящее письмо</a>
                 @endif
                 <a href="#"
                     class="tag-export-btn px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition duration-300 hidden"
@@ -111,7 +111,7 @@
                     <tr>
                         <th class="w-64 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             <a href="{{ route('home', ['sort' => 'name', 'order' => request('order') === 'asc' && request('sort') === 'name' ? 'desc' : 'asc']) }}">
-                                Название
+                                Наименование
                                 @if(request('sort') === 'name')
                                 @if(request('order') === 'asc')
                                 <i class="fas fa-sort-up ml-2"></i>
@@ -243,7 +243,7 @@
         // Confirmation dialog for delete button
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', function(e) {
-                if (!confirm('Вы уверены, что хотите удалить этот документ?')) {
+                if (!confirm('Вы уверены, что хотите удалить это письмо?')) {
                     e.preventDefault();
                 } else {
                     this.closest('form').submit();

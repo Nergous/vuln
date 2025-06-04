@@ -8,7 +8,7 @@
     <!-- Шапка -->
     <div class="sticky top-0 z-10 bg-white shadow-lg rounded-lg mb-6">
         <div class="flex justify-between items-center p-4">
-            <h1 class="text-2xl font-bold text-gray-800">Добавить руководящий документ</h1>
+            <h1 class="text-2xl font-bold text-gray-800">Добавить руководящее письмо</h1>
             <a href="{{ route('home') }}" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition duration-300">На главную</a>
         </div>
     </div>
@@ -29,9 +29,9 @@
             @csrf
             <!-- Название -->
             <div class="mb-6">
-                <label for="name" class="block text-gray-600 mb-2">Название:</label>
+                <label for="name" class="block text-gray-600 mb-2">Наименование:</label>
                 <input type="text" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('name') border-red-500 @enderror"
-                    value="{{ old('name') }}" placeholder="Введите название" required>
+                    value="{{ old('name') }}" placeholder="Введите наименование" required>
                 @error('name')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
@@ -172,8 +172,8 @@
             </div>
             <div class="vulnerability-content">
                 <div class="mb-4">
-                    <label for="vulnerabilities[${vulnerabilityIndex}][name]" class="block text-gray-600 mb-2">Название уязвимости / задачи:</label>
-                    <input type="text" name="vulnerabilities[${vulnerabilityIndex}][name]" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите название уязвимости / задачи" required>
+                    <label for="vulnerabilities[${vulnerabilityIndex}][name]" class="block text-gray-600 mb-2">Наименование уязвимости / задачи:</label>
+                    <input type="text" name="vulnerabilities[${vulnerabilityIndex}][name]" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Введите наименование уязвимости / задачи" required>
                 </div>
                 <div class="mb-4">
                     <label for="vulnerabilities[${vulnerabilityIndex}][code]" class="block text-gray-600 mb-2">Код уязвимости / задачи:</label>

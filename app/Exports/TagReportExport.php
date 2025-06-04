@@ -55,10 +55,10 @@ class TagReportExport implements FromCollection, WithHeadings, WithEvents
     {
         return [
             'ID',
-            'Номер документа',
-            'Название документа',
+            'Номер письма',
+            'Наименование письма',
             'Дата',
-            'Статус документа',
+            'Статус письма',
             'Тэги',
             'Причина отложки'
         ];
