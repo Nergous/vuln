@@ -252,7 +252,7 @@ class ReportController extends Controller
 
     public function delay($id)
     {
-        return view('report.change_delay', compact('id'));
+        return view('report.change_delay', compact('id', 'document'));
     }
 
     public function createDelay(Request $request, $id)
