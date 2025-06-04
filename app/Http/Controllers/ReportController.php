@@ -252,6 +252,7 @@ class ReportController extends Controller
 
     public function delay($id)
     {
+        $document = Document::findOrFail($id);
         return view('report.change_delay', compact('id', 'document'));
     }
 
